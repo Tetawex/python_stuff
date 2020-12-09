@@ -1,7 +1,21 @@
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
 
-data_frame = pd.read_csv("D:\\Projects\\vkr\\assets\\data\\vehicles.csv")
+ODOMETER = 'ODOMETER'
+SPEED = 'SPEED'
 
-# print(data_frame[['ASSET']].drop_duplicates().count())
-print(type(data_frame['ASSET'] == 123))
+data_frame = pd.read_csv("data.csv")
+
+data_frame.describe()
+
+# clustering = KMeans(n_clusters=6).fit(data_frame[[SPEED]])
+# labels = clustering.labels_
+#
+# odometer_points = data_frame[[ODOMETER]]
+# speed_points = data_frame[[SPEED]]
+#
+# plot = plt.scatter(x=odometer_points, y=speed_points, c=labels)
+# plt.show()
+#
+# print(labels)
