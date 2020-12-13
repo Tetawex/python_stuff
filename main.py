@@ -1,29 +1,32 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-
-ODOMETER = 'ODOMETER'
-SPEED = 'SPEED'
-
-data_frame = pd.read_csv("data.csv")
-
-data_frame.describe()
-df['reviews_per_month',
-   'number_of_reviews',
-   'price',
-   'accommodates',
-   'beds',
-   'minimum_nights'
-].append(bool_map(df['host_has_profile_pic'])).append(bool_map(df['host_identity_verified'])).append(
-    bool_map(df['instant_bookable']))
-
-# clustering = KMeans(n_clusters=6).fit(data_frame[[SPEED]])
-# labels = clustering.labels_
+# import matplotlib.pyplot as plt
+# from sklearn import linear_model
+# from sklearn.metrics import mean_squared_error, r2_score
+# from sklearn.model_selection import train_test_split
 #
-# odometer_points = data_frame[[ODOMETER]]
-# speed_points = data_frame[[SPEED]]
+# TARGET_COLUMN = 'price'
 #
-# plot = plt.scatter(x=odometer_points, y=speed_points, c=labels)
-# plt.show()
+# train, test = train_test_split(new_df, test_size=0.2)
 #
-# print(labels)
+# predictors = train[train.columns[train.columns != TARGET_COLUMN]].fillna(train.mean())
+# target = train[[TARGET_COLUMN]].fillna(train.mean())
+#
+# test_predictors = test[test.columns[test.columns != TARGET_COLUMN]].fillna(test.mean())
+# test_target = test[[TARGET_COLUMN]].fillna(test.mean())
+#
+# # Create linear regression object
+# regr = linear_model.LinearRegression()
+#
+# # Train the model using the training sets
+# regr.fit(predictors, target)
+#
+# # Make predictions using the testing set
+# prediction = regr.predict(test_predictors)
+#
+# # The coefficients
+# print('Coefficients: \n', regr.coef_)
+# # The mean squared error
+# print('Mean squared error: %.2f'
+#       % mean_squared_error(test_target, prediction))
+# # The coefficient of determination: 1 is perfect prediction
+# print('Coefficient of determination: %.2f'
+#       % r2_score(test_target, prediction))
