@@ -10,6 +10,8 @@ pandas = "*"
 matplotlib = "*"
 sklearn = "*"
 notebook = "*"
+statsmodels = "*"
+patsy = "*"
 
 [requires]
 python_version = "3.8"
