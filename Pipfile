@@ -12,6 +12,8 @@ sklearn = "*"
 notebook = "*"
 statsmodels = "*"
 patsy = "*"
+xgboost = "*"
+graphviz = "*"
 
 [requires]
 python_version = "3.8"
