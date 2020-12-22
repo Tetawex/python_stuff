@@ -30,3 +30,19 @@
 # # The coefficient of determination: 1 is perfect prediction
 # print('Coefficient of determination: %.2f'
 #       % r2_score(test_target, prediction))
+# Модель 1 - деревья решений
+tree_model = model_utils.process_model(
+    model=xgb.XGBRegressor(objective='reg:squarederror',
+                           n_jobs=8,
+                           tree_method='gpu_hist',
+                           colsample_bytree=0.4,
+                           learning_rate=0.01,
+                           max_depth=9,
+                           min_child_weight=4,
+                           alpha=0,
+                           gamma=0,
+                           n_estimators=1000,
+                           seed=123),
+    df=final_df,
+    dependent=TARGET_COLUMN,
+    predictors=PREDICTORS)
