@@ -74,7 +74,7 @@ def process_model(model, df, dependent, predictors):
 
 
 def process_cl_model(model, df, dependent, predictors):
-    # Уравнение регрессии
+    # Уравнение
     equation = dependent + ' ~ ' + (' + '.join(predictors))
 
     y, X = dmatrices(equation, data=df, return_type='dataframe')
