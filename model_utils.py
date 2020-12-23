@@ -73,7 +73,7 @@ def process_model(model, df, dependent, predictors):
     return model
 
 
-def process_cl_model(model, df, dependent, predictors):
+def process_cl_model(model, df, dependent, cat_labels, predictors):
     # Уравнение
     equation = dependent + ' ~ ' + (' + '.join(predictors))
 
@@ -91,13 +91,13 @@ def process_cl_model(model, df, dependent, predictors):
     y_pred = model.predict(X_test)
 
     # Считаем метрики качества
-    target_names = list(map(lambda s: 'Class ' + s, df[dependent].astype('category').unique().astype('str').tolist()))
-    # target_names = [1,2,3,4,5]
+    target_names = list(map(lambda s: 'Class ' + s, df[cat_labels].unique().astype('str').tolist()))
     plt.figure(figsize=(5, 5))
     sns.heatmap(
         pd.DataFrame(classification_report(y_test, y_pred, target_names=target_names, output_dict=True)).iloc[:-1, :].T,
         annot=True)
     plt.show()
+    display(classification_report(y_test, y_pred, target_names=target_names, output_dict=True))
     # display(pd.DataFrame(classification_report(y_test, y_pred, target_names=target_names, output_dict=True)))
 
     # Визуализация
