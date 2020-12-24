@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
+from sklearn.utils import check_array
 
 import graphviz
 import os
@@ -46,12 +47,16 @@ def process_model(model, df, dependent, predictors):
     adjusted_r_2 = 1 - (1 - r2) * (len(y_test) - 1) / (len(y_test) - X_test.shape[1] - 1)
 
     print('MSE: %.3f' % mse)
-    print('Mean Error: %.3f$' % rmse)
+    print('Mean Error: %.3f' % rmse)
     print('R^2: %.3f' % r2)
     print('Adjusted R^2: %.3f' % adjusted_r_2)
 
     print(type(model))
 
+    y_test = y_test.apply(np.exp)
+    y_pred = np.exp(y_pred.flatten().reshape(-1, 1))
+
+    print('MAPE: %.3f' % mean_absolute_percentage_error(y_test, y_pred))
     # Строим график
     y_pred_scatter_index = list(range(0, len(y_test)))
 
@@ -74,8 +79,18 @@ def process_model(model, df, dependent, predictors):
                     #                 hue='property_type_computed',
                     data=comp_df).set_title('Prediction quality')
 
+
     return model
 
+def mean_absolute_percentage_error(y_true, y_pred):
+    y_true = check_array(y_true)
+    y_pred = check_array(y_pred)
+
+    ## Note: does not handle mix 1d representation
+    #if _is_1d(y_true):
+    #    y_true, y_pred = _check_1d_array(y_true, y_pred)
+
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 def process_cl_model(model, df, dependent, cat_labels, predictors, print_tree):
     # Уравнение
