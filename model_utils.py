@@ -37,6 +37,8 @@ def process_model(model, df, dependent, predictors):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
 
+    display(y_pred)
+
     # Считаем метрики качества
     mse = mean_squared_error(y_test, y_pred)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
@@ -48,16 +50,18 @@ def process_model(model, df, dependent, predictors):
     print('R^2: %.3f' % r2)
     print('Adjusted R^2: %.3f' % adjusted_r_2)
 
+    print(type(model))
+
     # Строим график
-    y_pred_scatter_index = range(0, len(y_test))
+    y_pred_scatter_index = list(range(0, len(y_test)))
 
     vec_test = pd.Series(y_test[dependent], index=y_pred_scatter_index, dtype='float')
-    vec_pred = pd.Series(y_pred, index=y_pred_scatter_index, dtype='float')
+    vec_pred = pd.Series(y_pred.flatten(), index=y_pred_scatter_index, dtype='float')
 
     frame = {'Actual Price, $': vec_test, 'Predicted Price, $': vec_pred, }
 
     comp_df = pd.DataFrame(frame, index=y_pred_scatter_index) \
-        # .join(df['property_type_computed'].reindex(y_pred_scatter_index))
+        # .join(df['property_type_computed'].reindex(y_pred_scatter_index), how='inner')
 
     y_min_val = min(vec_pred.min(), vec_test.min())
     y_max_val = max(vec_pred.max(), vec_test.max())
@@ -73,7 +77,7 @@ def process_model(model, df, dependent, predictors):
     return model
 
 
-def process_cl_model(model, df, dependent, cat_labels, predictors):
+def process_cl_model(model, df, dependent, cat_labels, predictors, print_tree):
     # Уравнение
     equation = dependent + ' ~ ' + (' + '.join(predictors))
 
@@ -95,17 +99,20 @@ def process_cl_model(model, df, dependent, cat_labels, predictors):
     plt.figure(figsize=(5, 5))
     sns.heatmap(
         pd.DataFrame(classification_report(y_test, y_pred, target_names=target_names, output_dict=True)).iloc[:-1, :].T,
-        annot=True)
+        annot=True,
+        vmin=0.4, vmax=1)
     plt.show()
     display(classification_report(y_test, y_pred, target_names=target_names, output_dict=True))
     # display(pd.DataFrame(classification_report(y_test, y_pred, target_names=target_names, output_dict=True)))
 
     # Визуализация
-    ft_weights_xgb_reg = pd.DataFrame(model.feature_importances_, columns=['weight'], index=X_train.columns)
-    ft_weights_xgb_reg.sort_values('weight', ascending=False, inplace=True)
-    display(ft_weights_xgb_reg)
 
-    viz_tree(model)
+    if print_tree:
+        ft_weights_xgb_reg = pd.DataFrame(model.feature_importances_, columns=['weight'], index=X_train.columns)
+        ft_weights_xgb_reg.sort_values('weight', ascending=False, inplace=True)
+        display(ft_weights_xgb_reg)
+
+        viz_tree(model)
 
 
 def viz_tree(model):
